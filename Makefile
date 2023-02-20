@@ -9,6 +9,10 @@ GATEWAY_IMAGE_TAG?=latest
 # It uses `-` by default which means stdout.
 DEBUG?=true
 
+# Override the default docker run arguments. this is useful for running the
+# commands as a non-root user.
+LOCAL_RUN_ARGS?=--userns host -u $(shell id -u):$(shell id -g)
+
 .PHONY: help
 help: Makefile ## Print help
 	@grep -h "##" $(MAKEFILE_LIST) | grep -v grep | sed -e 's/:.*##/#/' | column -c 2 -t -s#
@@ -16,12 +20,16 @@ help: Makefile ## Print help
 .PHONY: verify
 verify:	## Run lintings and verification on endpoints
 	@echo "Verifying the endpoints..."
-	@docker run --rm -t -v $(PWD)/endpoints:/endpoints $(APIHELPER_IMAGE):$(APIHELPER_IMAGE_TAG) verify --debug=$(DEBUG) --endpoints /endpoints
+	@docker run \
+		--rm -t -v $(PWD)/endpoints:/endpoints $(LOCAL_RUN_ARGS) $(APIHELPER_IMAGE):$(APIHELPER_IMAGE_TAG) \
+		verify --debug=$(DEBUG) --endpoints /endpoints
 
 .PHONY: aggregate
 aggregate: 		## Aggregate the endpoints into a single file
 	@echo "Aggregating the endpoints..."
-	@docker run --rm -t -v $(PWD):/workdir $(APIHELPER_IMAGE):$(APIHELPER_IMAGE_TAG) aggregate --debug=$(DEBUG) \
+	@docker run \
+		--rm -t -v $(PWD):/workdir $(LOCAL_RUN_ARGS) $(APIHELPER_IMAGE):$(APIHELPER_IMAGE_TAG) \
+		aggregate --debug=$(DEBUG) \
 		--vhost \
 		--endpoints /workdir/endpoints \
 		--output "/workdir/endpoints.json"
@@ -29,7 +37,8 @@ aggregate: 		## Aggregate the endpoints into a single file
 .PHONY: generate
 generate:	## Generate the krakend configuration
 	@echo "Generating the krakend configuration..."
-	@docker run --rm -t -v $(PWD):/workdir $(APIHELPER_IMAGE):$(APIHELPER_IMAGE_TAG) generate --debug=$(DEBUG) \
+	@docker run --rm -t -v $(PWD):/workdir $(LOCAL_RUN_ARGS) $(APIHELPER_IMAGE):$(APIHELPER_IMAGE_TAG) \
+		generate --debug=$(DEBUG) \
 		--vhost \
 		--endpoints /workdir/endpoints \
 		--config /workdir/krakendcfg/krakend.tmpl \
