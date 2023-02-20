@@ -1,0 +1,22 @@
+{
+    "$schema": "https://www.krakend.io/schema/endpoint.json",
+    "$id": "#endpoint/endpoint",
+    "endpoint": "/apis/v1/roots",
+    "method": "GET",
+    "backend": [
+        {
+            "url_pattern": "/apis/v1/{directory}",
+            "method": "GET",
+            "host": [
+                "https://test.api.example.com"
+            ]
+        }
+    ],
+    "input_headers": [
+        "X-Directory-Id"
+    ],
+    "input_query_strings": [
+        "items",
+        "page"
+    ]
+}

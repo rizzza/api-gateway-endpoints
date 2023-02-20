@@ -1,0 +1,66 @@
+[
+    {
+        "$schema": "https://www.krakend.io/schema/endpoint.json",
+        "$id": "#endpoint/endpoint",
+        "endpoint": "/v1/",
+        "method": "GET",
+        "backend": [
+            {
+                "url_pattern": "/apis/v1/",
+                "method": "GET",
+                "sd": "dns",
+                "host": [
+                    "_test.api.example.com"
+                ],
+                "disable_host_sanitize": true
+            }
+        ],
+        "input_headers": [
+            "X-Directory-Id"
+        ],
+        "input_query_strings": [
+            "items",
+            "page"
+        ]
+    },
+    {
+        "$schema": "https://www.krakend.io/schema/endpoint.json",
+        "$id": "#endpoint/endpoint",
+        "endpoint": "/v1/{directory}",
+        "method": "GET",
+        "backend": [
+            {
+                "url_pattern": "/apis/v1/{directory}",
+                "method": "GET",
+                "sd": "dns",
+                "host": [
+                    "_test.api.example.com"
+                ],
+                "disable_host_sanitize": true
+            }
+        ],
+        "input_headers": [
+            "X-Directory-Id"
+        ]
+    },
+    {
+        "$schema": "https://www.krakend.io/schema/endpoint.json",
+        "$id": "#endpoint/endpoint",
+        "endpoint": "/v1/{directory}",
+        "method": "POST",
+        "backend": [
+            {
+                "url_pattern": "/apis/v1/{directory}",
+                "method": "POST",
+                "sd": "dns",
+                "host": [
+                    "_test.api.example.com"
+                ],
+                "disable_host_sanitize": true
+            }
+        ],
+        "input_headers": [
+            "X-Directory-Id"
+        ]
+    }
+]

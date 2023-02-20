@@ -1,0 +1,50 @@
+{
+    "$schema": "https://www.krakend.io/schema/v3.json",
+    "version": 3,
+    "name": "your-api-group-name",
+    "port": {{ env "KRAKEND_PORT" }},
+    "timeout": "3s",
+    "cache_ttl":  "3s",
+    "output_encoding": "json",
+    "plugin": {
+        "pattern":".so",
+        "folder": "/opt/krakend/plugins/"
+    },
+    "extra_config": {
+      "router": {
+        "@comment": "The health endpoint checks do not show in the logs",
+        "logger_skip_paths": [
+           "/__health"
+        ]
+      },
+      "plugin/http-server": {
+        "name": ["virtualhost"],
+        "virtualhost": {
+          "hosts": ["api.test.v1"]
+        }
+      },
+      "telemetry/opencensus": {
+          "sample_rate": 100,
+          "reporting_period": 1,
+          "enabled_layers": {
+            "backend": true,
+            "pipe": true,
+            "router": true
+          },
+        "exporters": {
+          "prometheus": {
+            "port": 9091,
+            "tag_host": true,
+            "tag_path": true,
+            "tag_method": true,
+            "tag_statuscode": true
+          }
+        }
+      }
+    },
+    "tls": {
+      "public_key": "/cert/tls.crt",
+      "private_key": "/cert/tls.key"
+    },
+    "endpoints": $ENDPOINTS$
+}
