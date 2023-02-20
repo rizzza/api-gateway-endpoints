@@ -1,5 +1,5 @@
 # TODO(jaosorior): Move this image to infratographer
-APIHELPER_IMAGE=ghcr.io/jaormx/krakend-endpoints-tool/krakend-endpoints-tool
+APIHELPER_IMAGE=ghcr.io/infratographer/krakend-endpoints-tool/krakend-endpoints-tool
 APIHELPER_IMAGE_TAG?=latest
 
 GATEWAY_IMAGE=ghcr.io/infratographer/api-gateway-image
