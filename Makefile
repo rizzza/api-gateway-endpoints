@@ -1,7 +1,3 @@
-# TODO(jaosorior): Move this image to infratographer
-APIHELPER_IMAGE=ghcr.io/infratographer/krakend-endpoints-tool/krakend-endpoints-tool
-APIHELPER_IMAGE_TAG?=latest
-
 GATEWAY_IMAGE=ghcr.io/infratographer/api-gateway-image
 GATEWAY_IMAGE_TAG?=latest
 
@@ -17,36 +13,21 @@ LOCAL_RUN_ARGS?=--userns host -u $(shell id -u):$(shell id -g)
 help: Makefile ## Print help
 	@grep -h "##" $(MAKEFILE_LIST) | grep -v grep | sed -e 's/:.*##/#/' | column -c 2 -t -s#
 
-.PHONY: verify
-verify:	## Run lintings and verification on endpoints
-	@echo "Verifying the endpoints..."
+.PHONY:
+check_generate:	## Run lintings and verification on endpoints
+	@echo "Verifying the endpoints and config"
 	@docker run \
-		--rm -t -v $(PWD)/endpoints:/endpoints $(LOCAL_RUN_ARGS) $(APIHELPER_IMAGE):$(APIHELPER_IMAGE_TAG) \
-		verify --debug=$(DEBUG) --endpoints /endpoints
-
-.PHONY: aggregate
-aggregate: 		## Aggregate the endpoints into a single file
-	@echo "Aggregating the endpoints..."
-	@docker run \
-		--rm -t -v $(PWD):/workdir $(LOCAL_RUN_ARGS) $(APIHELPER_IMAGE):$(APIHELPER_IMAGE_TAG) \
-		aggregate --debug=$(DEBUG) \
-		--vhost \
-		--endpoints /workdir/endpoints \
-		--output "/workdir/endpoints.json"
-
-.PHONY: generate
-generate:	## Generate the krakend configuration
-	@echo "Generating the krakend configuration..."
-	@docker run --rm -t -v $(PWD):/workdir $(LOCAL_RUN_ARGS) $(APIHELPER_IMAGE):$(APIHELPER_IMAGE_TAG) \
-		generate --debug=$(DEBUG) \
-		--vhost \
-		--endpoints /workdir/endpoints \
-		--config /workdir/krakendcfg/krakend.tmpl \
-		--output "/workdir/krakend.tmpl"
-	@echo "\n\n* Generated krakend.tmpl"
+		--rm -t \
+		-v $(PWD)/krakendcfg:/etc/krakend/ \
+		-e FC_ENABLE=1 -e KRAKEND_PORT=8888 \
+		-e FC_SETTINGS=/etc/krakend/settings \
+		-e FC_PARTIALS=/etc/krakend/partials \
+		-e FC_TEMPLATES=/etc/krakend/templates \
+		-e FC_OUT=krakend.yml \
+		devopsfaith/krakend check -dtc krakend.tmpl
 
 .PHONY: gateway-image
-gateway-image: generate	## Generate the krakend configuration and build the image
+gateway-image: check_generate	## Generate the krakend configuration and build the image
 	@echo "building API image..."
 	@docker build -t $(GATEWAY_IMAGE):$(GATEWAY_IMAGE_TAG) -f Dockerfile .
 	@echo "endpoints image available in $(GATEWAY_IMAGE):$(GATEWAY_IMAGE_TAG)"

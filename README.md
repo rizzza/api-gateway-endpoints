@@ -11,16 +11,13 @@ the krakend configuration and the krakend binary and plugins.
 
 ### Adding endpoints
 
-All the definitions are in the `endpoints` directory. The format of the files follows the
+All the definitions are in the `krakendcfg/templates` directory. Once you create your endpoint file, add it's reference to the `krakendcfg/templates/_endpoints.tmpl` file. The format of the files follows the
 [Lura](https://luraproject.org/) [endpoint configuration format](https://www.krakend.io/docs/endpoints/).
 Specifically, each file may be a single endpoint definition or an array of endpoint definitions.
 
-Each file should be placed in a directory named after the service it is for. The name of the file should be
-the name of the endpoint.
+The name of the file should be the name of the endpoint.
 
-The files in `endpoints/api.test.v1/` serve as examples.
-
-The top level directory should be the FQDN of your API group. e.g. `iam.metalctrl.io`.
+The file in `krakendcfg/templates/loadbalancer_api_v1.tmpl` serves as an example.
 
 ## Distribution
 
@@ -40,26 +37,10 @@ In order to locally verify that the endpoint definitions are valid, you can run 
 command:
 
 ```bash
-make verify
+make check_generate
 ```
 
-This will ensure that any endpoints you create within the `endpoints` directory are valid.
-
-If you want to see how the endpoint definitions are transformed into the API Gateway configuration,
-you can run the following command:
-
-```bash
-make aggregate
-```
-
-If you want to generate the API Gateway configuration and print it to the console, you can run:
-
-```bash
-make generate
-```
-
-This will print the API Gateway configuration to the console. It will also create a file named
-`krakend.tmpl` in the root of the repository. This file is ignored by git.
+This will ensure that any endpoints you create within the `krakendcfg/templates` directory are valid.
 
 Finally, if you want to create a container image like the one we ship with the API Gateway, you
 can run the following command:
