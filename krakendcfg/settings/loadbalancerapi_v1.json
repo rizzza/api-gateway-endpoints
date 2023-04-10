@@ -1,0 +1,5 @@
+{
+    "backend_hosts": [
+        "api.loadbalancer.host"
+    ]
+}

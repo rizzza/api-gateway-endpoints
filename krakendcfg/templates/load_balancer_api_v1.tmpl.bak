@@ -1,0 +1,286 @@
+{
+    "$schema": "https://www.krakend.io/schema/endpoint.json",
+    "$id": "#endpoint/endpoint",
+    "endpoint": "/v1/tenant/{tenantID}/load_balancers",
+    "method": "GET",
+    "input_headers": [
+        "Authorization",
+        "Host",
+        "Content-Type",
+        "Content-Length"
+    ],
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/v1/tenant/{tenantID}/loadbalancers",
+            "method": "GET",
+            "host": ["https://{{ .service.backend_hosts.load_balancer_api }}"],
+            "extra_config": {
+                "backend/http": {
+                    "return_error_code": true,
+                    "return_error_msg": true
+                }
+            }
+        }
+    ]
+},
+{
+    "$schema": "https://www.krakend.io/schema/endpoint.json",
+    "$id": "#endpoint/endpoint",
+    "endpoint": "/v1/load_balancers/{loadBalancerID}",
+    "method": "GET",
+    "input_headers": [
+        "Authorization",
+        "Host",
+        "Content-Type",
+        "Content-Length"
+    ],
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/v1/loadbalancers/{loadBalancerID}",
+            "method": "GET",
+            "host": ["https://{{ .service.backend_hosts.load_balancer_api }}"],
+            "extra_config": {
+                "backend/http": {
+                    "return_error_code": true,
+                    "return_error_msg": true
+                }
+            }
+        }
+    ]
+},
+{
+    "$schema": "https://www.krakend.io/schema/endpoint.json",
+    "$id": "#endpoint/endpoint",
+    "endpoint": "/v1/tenant/{tenantID}/load_balancers",
+    "method": "POST",
+    "input_headers": [
+        "Authorization",
+        "Host",
+        "Content-Type",
+        "Content-Length"
+    ],
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/v1/tenant/{tenantID}/loadbalancers",
+            "method": "POST",
+            "host": ["https://{{ .service.backend_hosts.load_balancer_api }}"],
+            "extra_config": {
+                "backend/http": {
+                    "return_error_code": true,
+                    "return_error_msg": true
+                }
+            }
+        }
+    ]
+},
+{
+    "$schema": "https://www.krakend.io/schema/endpoint.json",
+    "$id": "#endpoint/endpoint",
+    "endpoint": "/v1/load_balancers/{loadBalancerID}/ports",
+    "method": "POST",
+    "input_headers": [
+        "Authorization",
+        "Host",
+        "Content-Type",
+        "Content-Length"
+    ],
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/v1/loadbalancers/{loadBalancerID}/ports",
+            "method": "POST",
+            "host": ["https://{{ .service.backend_hosts.load_balancer_api }}"],
+            "extra_config": {
+                "backend/http": {
+                    "return_error_code": true,
+                    "return_error_msg": true
+                }
+            }
+        }
+    ]
+},
+{
+    "$schema": "https://www.krakend.io/schema/endpoint.json",
+    "$id": "#endpoint/endpoint",
+    "endpoint": "/v1/load_balancers/{loadBalancerID}/ports/{portID}",
+    "method": "PUT",
+    "input_headers": [
+        "Authorization",
+        "Host",
+        "Content-Type",
+        "Content-Length"
+    ],
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/v1/ports/{portID}",
+            "method": "PUT",
+            "host": ["https://{{ .service.backend_hosts.load_balancer_api }}"],
+            "extra_config": {
+                "backend/http": {
+                    "return_error_code": true,
+                    "return_error_msg": true
+                }
+            }
+        }
+    ]
+},
+{
+    "$schema": "https://www.krakend.io/schema/endpoint.json",
+    "$id": "#endpoint/endpoint",
+    "endpoint": "/v1/load_balancers/{loadBalancerID}/ports/{portID}",
+    "method": "PATCH",
+    "input_headers": [
+        "Authorization",
+        "Host",
+        "Content-Type",
+        "Content-Length"
+    ],
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/v1/ports/{portID}",
+            "method": "PATCH",
+            "host": ["https://{{ .service.backend_hosts.load_balancer_api }}"],
+            "extra_config": {
+                "backend/http": {
+                    "return_error_code": true,
+                    "return_error_msg": true
+                }
+            }
+        }
+    ]
+},
+{
+    "$schema": "https://www.krakend.io/schema/endpoint.json",
+    "$id": "#endpoint/endpoint",
+    "endpoint": "/v1/load_balancers/{loadBalancerID}/ports/{portID}",
+    "method": "DELETE",
+    "input_headers": [
+        "Authorization",
+        "Host",
+        "Content-Type",
+        "Content-Length"
+    ],
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/v1/ports/{portID}",
+            "method": "DELETE",
+            "host": ["https://{{ .service.backend_hosts.load_balancer_api }}"],
+            "extra_config": {
+                "backend/http": {
+                    "return_error_code": true,
+                    "return_error_msg": true
+                }
+            }
+        }
+    ]
+},
+{
+    "$schema": "https://www.krakend.io/schema/endpoint.json",
+    "$id": "#endpoint/endpoint",
+    "endpoint": "/v1/tenant/{tenantID}/load_balancers/pools",
+    "method": "POST",
+    "input_headers": [
+        "Authorization",
+        "Host",
+        "Content-Type",
+        "Content-Length"
+    ],
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/v1/tenant/{tenantID}/pools",
+            "method": "POST",
+            "host": ["https://{{ .service.backend_hosts.load_balancer_api }}"],
+            "extra_config": {
+                "backend/http": {
+                    "return_error_code": true,
+                    "return_error_msg": true
+                }
+            }
+        }
+    ]
+},
+{
+    "$schema": "https://www.krakend.io/schema/endpoint.json",
+    "$id": "#endpoint/endpoint",
+    "endpoint": "/v1/load_balancers/pools/{poolID}",
+    "method": "GET",
+    "input_headers": [
+        "Authorization",
+        "Host",
+        "Content-Type",
+        "Content-Length"
+    ],
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/v1/pools/{poolID}",
+            "method": "GET",
+            "host": ["https://{{ .service.backend_hosts.load_balancer_api }}"],
+            "extra_config": {
+                "backend/http": {
+                    "return_error_code": true,
+                    "return_error_msg": true
+                }
+            }
+        }
+    ]
+},
+{
+    "$schema": "https://www.krakend.io/schema/endpoint.json",
+    "$id": "#endpoint/endpoint",
+    "endpoint": "/v1/load_balancers/pools/{poolID}",
+    "method": "PATCH",
+    "input_headers": [
+        "Authorization",
+        "Host",
+        "Content-Type",
+        "Content-Length"
+    ],
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/v1/pools/{poolID}",
+            "method": "PATCH",
+            "host": ["https://{{ .service.backend_hosts.load_balancer_api }}"],
+            "extra_config": {
+                "backend/http": {
+                    "return_error_code": true,
+                    "return_error_msg": true
+                }
+            }
+        }
+    ]
+},
+{
+    "$schema": "https://www.krakend.io/schema/endpoint.json",
+    "$id": "#endpoint/endpoint",
+    "endpoint": "/v1/load_balancers/pools/{poolID}",
+    "method": "PUT",
+    "input_headers": [
+        "Authorization",
+        "Host",
+        "Content-Type",
+        "Content-Length"
+    ],
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/v1/pools/{poolID}",
+            "method": "PUT",
+            "host": ["https://{{ .service.backend_hosts.load_balancer_api }}"],
+            "extra_config": {
+                "backend/http": {
+                    "return_error_code": true,
+                    "return_error_msg": true
+                }
+            }
+        }
+    ]
+}

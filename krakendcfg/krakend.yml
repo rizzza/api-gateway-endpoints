@@ -1,0 +1,72 @@
+---
+"$schema": https://www.krakend.io/schema/v3.json
+version: 3
+name: your-api-group-name
+port: 8888
+timeout: 3s
+cache_ttl: 3s
+output_encoding: json
+plugin:
+  pattern: ".so"
+  folder: "/opt/krakend/plugins/"
+extra_config:
+  router:
+    "@comment": The health endpoint checks do not show in the logs
+    logger_skip_paths:
+    - "/__health"
+  plugin/http-server:
+    name:
+    - virtualhost
+    virtualhost:
+      hosts:
+      - api.test.v1
+  telemetry/opencensus:
+    sample_rate: 100
+    reporting_period: 1
+    enabled_layers:
+      backend: true
+      pipe: true
+      router: true
+    exporters:
+      prometheus:
+        port: 9091
+        tag_host: true
+        tag_path: true
+        tag_method: true
+        tag_statuscode: true
+tls:
+  public_key: "/cert/tls.crt"
+  private_key: "/cert/tls.key"
+endpoints: 
+- $schema: https://www.krakend.io/schema/endpoint.json
+  $id: "#endpoint/endpoint"
+  endpoint: /v1/tenant/{tenantID}/load_balancers
+  method: GET
+  input_headers: &input_headers
+    - Authorization
+    - Host
+    - Content-Type
+    - Content-Length
+  output_encoding: &outputEncoding no-op
+  backend:
+    - url_pattern: /v1/tenant/{tenantID}/loadbalancers
+      method: GET
+      host: &hosts [api.loadbalancer.host]
+      extra_config: &extraConfigReturnErrorMsgCode
+        backend/http: &backendReturnErrorMsgCode
+          return_error_code: true
+          return_error_msg: true
+- $schema: https://www.krakend.io/schema/endpoint.json
+  $id: "#endpoint/endpoint"
+  endpoint: /v1/load_balancers/{loadBalancerID}
+  method: GET
+  input_headers: *input_headers
+  output_encoding: *outputEncoding
+  backend:
+    - url_pattern: /v1/loadbalancers/{loadBalancerID}
+      method: GET
+      host: *hosts
+      extra_config: *extraConfigReturnErrorMsgCode
+
+
+

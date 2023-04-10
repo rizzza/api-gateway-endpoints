@@ -1,0 +1,29 @@
+- $schema: https://www.krakend.io/schema/endpoint.json
+  $id: "#endpoint/endpoint"
+  endpoint: /v1/tenant/{tenantID}/load_balancers
+  method: GET
+  input_headers: &input_headers
+    - Authorization
+    - Host
+    - Content-Type
+    - Content-Length
+  output_encoding: &outputEncoding no-op
+  backend:
+    - url_pattern: /v1/tenant/{tenantID}/loadbalancers
+      method: GET
+      host: &hosts {{ .loadbalancerapi_v1.backend_hosts }}
+      extra_config: &extraConfigReturnErrorMsgCode
+        backend/http: &backendReturnErrorMsgCode
+          return_error_code: true
+          return_error_msg: true
+- $schema: https://www.krakend.io/schema/endpoint.json
+  $id: "#endpoint/endpoint"
+  endpoint: /v1/load_balancers/{loadBalancerID}
+  method: GET
+  input_headers: *input_headers
+  output_encoding: *outputEncoding
+  backend:
+    - url_pattern: /v1/loadbalancers/{loadBalancerID}
+      method: GET
+      host: *hosts
+      extra_config: *extraConfigReturnErrorMsgCode
