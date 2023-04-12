@@ -9,6 +9,8 @@ GATEWAY_IMAGE_TAG?=latest
 # It uses `-` by default which means stdout.
 DEBUG?=true
 
+KRAKEND_PORT?=8080
+
 # Override the default docker run arguments. this is useful for running the
 # commands as a non-root user.
 LOCAL_RUN_ARGS?=--userns host -u $(shell id -u):$(shell id -g)
@@ -39,7 +41,6 @@ generate:	## Generate the krakend configuration
 	@echo "Generating the krakend configuration..."
 	@docker run --rm -t -v $(PWD):/workdir $(LOCAL_RUN_ARGS) $(APIHELPER_IMAGE):$(APIHELPER_IMAGE_TAG) \
 		generate --debug=$(DEBUG) \
-		--vhost \
 		--endpoints /workdir/endpoints \
 		--config /workdir/krakendcfg/krakend.tmpl \
 		--output "/workdir/krakend.tmpl"
@@ -50,3 +51,11 @@ gateway-image: generate	## Generate the krakend configuration and build the imag
 	@echo "building API image..."
 	@docker build -t $(GATEWAY_IMAGE):$(GATEWAY_IMAGE_TAG) -f Dockerfile .
 	@echo "endpoints image available in $(GATEWAY_IMAGE):$(GATEWAY_IMAGE_TAG)"
+
+.PHONY: run-local
+run-local: gateway-image ## Build and run local api gateway
+	@echo Starting api gateway...
+	@docker run --rm \
+		-v "$(PWD)/cert:/cert" \
+		-e KRAKEND_PORT=${KRAKEND_PORT} \
+		-p ${KRAKEND_PORT}:${KRAKEND_PORT} ghcr.io/infratographer/api-gateway-image
