@@ -1,0 +1,35 @@
+{
+    "name": "api-gateway-endpoints",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": "."
+    },
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+    "workspaceFolder": "/workspace",
+    "containerEnv":{
+        "KRAKEND_PORT": "8080",
+        "FC_ENABLE": "1"
+    },
+    "postCreateCommand": [
+        ".devcontainer/scripts/dev_cert.sh"
+    ],
+    "customizations": {
+        "vscode": {
+            "settings": {},
+
+            // Add the IDs of extensions you want installed when the container is created.
+            "extensions": [
+                "mutantdino.resourcemonitor",
+                "ms-azuretools.vscode-docker",
+                "RemiMarche.cspell-tech",
+                "streetsidesoftware.code-spell-checker"
+            ]
+        },
+        
+        "features": {
+            "git": "latest"
+        },
+
+        "remoteUser": "vscode"
+    }
+}

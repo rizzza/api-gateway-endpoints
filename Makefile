@@ -32,7 +32,6 @@ aggregate: 		## Aggregate the endpoints into a single file
 	@docker run \
 		--rm -t -v $(PWD):/workdir $(LOCAL_RUN_ARGS) $(APIHELPER_IMAGE):$(APIHELPER_IMAGE_TAG) \
 		aggregate --debug=$(DEBUG) \
-		--vhost \
 		--endpoints /workdir/endpoints \
 		--output "/workdir/endpoints.json"
 
@@ -59,3 +58,29 @@ run-local: gateway-image ## Build and run local api gateway
 		-v "$(PWD)/cert:/cert" \
 		-e KRAKEND_PORT=${KRAKEND_PORT} \
 		-p ${KRAKEND_PORT}:${KRAKEND_PORT} ghcr.io/infratographer/api-gateway-image
+
+.PHONY: dev-verify
+dev-verify:  ## Run lintings and verification on endpoints in the devcontainer
+	@echo "Verifying the endpoints..."
+	@krakend-endpoints-tool verify --debug=$(DEBUG) --endpoints /workspace/endpoints
+
+.PHONY: dev-aggregate
+dev-aggregate:  ## Aggregate the endpoints into a single file in the devcontainer
+	@echo "Aggregating the endpoints..."
+	@krakend-endpoints-tool aggregate --debug=$(DEBUG) \
+		--endpoints /workspace/endpoints \
+		--output "/workspace/endpoints.json"
+
+.PHONY: dev-generate
+dev-generate:  ## Generate the krakend configuration in the devcontainer
+	@echo "Generating the krakend configuration..."
+	@krakend-endpoints-tool  generate --debug=$(DEBUG) \
+		--endpoints /workspace/endpoints \
+		--config /workspace/krakendcfg/krakend.tmpl \
+		--output "/workspace/krakend.tmpl"
+	@echo "\n\n* Generated krakend.tmpl"
+
+.PHONY: dev-run
+dev-run:  ## Run the gateway in the devcontainer
+	@echo "* Running a local container with the generated configuration..."
+	@krakend run -c /workspace/krakend.tmpl
