@@ -1,7 +1,7 @@
 #### loadbalancers
 - $schema: https://www.krakend.io/schema/endpoint.json
   $id: "#endpoint/endpoint"
-  endpoint: /v1/tenant/{tenantID}/load_balancers
+  endpoint: /tenant/{tenantID}/load_balancers
   method: GET
   input_headers: &input_headers
     - Authorization
@@ -17,7 +17,7 @@
       extra_config: &extraConfig {}
 - $schema: https://www.krakend.io/schema/endpoint.json
   $id: "#endpoint/endpoint"
-  endpoint: /v1/load_balancers/{loadBalancerID}
+  endpoint: /load_balancers/{loadBalancerID}
   method: GET
   input_headers: *input_headers
   output_encoding: *outputEncoding
@@ -28,7 +28,7 @@
       extra_config: *extraConfig
 - $schema: https://www.krakend.io/schema/endpoint.json
   $id: "#endpoint/endpoint"
-  endpoint: /v1/tenant/{tenantID}/load_balancers
+  endpoint: /tenant/{tenantID}/load_balancers
   method: POST
   input_headers: *input_headers
   output_encoding: *outputEncoding
@@ -41,7 +41,7 @@
 #### ports
 - $schema: https://www.krakend.io/schema/endpoint.json
   $id: "#endpoint/endpoint"
-  endpoint: /v1/load_balancers/{loadBalancerID}/ports
+  endpoint: /load_balancers/{loadBalancerID}/ports
   method: POST
   input_headers: *input_headers
   output_encoding: *outputEncoding
@@ -52,7 +52,7 @@
       extra_config: *extraConfig
 - $schema: https://www.krakend.io/schema/endpoint.json
   $id: "#endpoint/endpoint"
-  endpoint: /v1/load_balancers/{loadBalancerID}/ports/{portID}
+  endpoint: /load_balancers/{loadBalancerID}/ports/{portID}
   method: PUT
   input_headers: *input_headers
   output_encoding: *outputEncoding
@@ -63,7 +63,7 @@
       extra_config: *extraConfig
 - $schema: https://www.krakend.io/schema/endpoint.json
   $id: "#endpoint/endpoint"
-  endpoint: /v1/load_balancers/{loadBalancerID}/ports/{portID}
+  endpoint: /load_balancers/{loadBalancerID}/ports/{portID}
   method: PATCH
   input_headers: *input_headers
   output_encoding: *outputEncoding
@@ -74,7 +74,7 @@
       extra_config: *extraConfig
 - $schema: https://www.krakend.io/schema/endpoint.json
   $id: "#endpoint/endpoint"
-  endpoint: /v1/load_balancers/{loadBalancerID}/ports/{portID}
+  endpoint: /load_balancers/{loadBalancerID}/ports/{portID}
   method: DELETE
   input_headers: *input_headers
   output_encoding: *outputEncoding
@@ -87,7 +87,7 @@
 #### pools
 - $schema: https://www.krakend.io/schema/endpoint.json
   $id: "#endpoint/endpoint"
-  endpoint: /v1/tenant/{tenantID}/load_balancers/pools
+  endpoint: /tenant/{tenantID}/load_balancers/pools
   method: POST
   input_headers: *input_headers
   output_encoding: *outputEncoding
@@ -98,7 +98,7 @@
       extra_config: *extraConfig
 - $schema: https://www.krakend.io/schema/endpoint.json
   $id: "#endpoint/endpoint"
-  endpoint: /v1/load_balancers/pools/{poolID}
+  endpoint: /load_balancers/pools/{poolID}
   method: GET
   input_headers: *input_headers
   output_encoding: *outputEncoding
@@ -109,7 +109,7 @@
       extra_config: *extraConfig
 - $schema: https://www.krakend.io/schema/endpoint.json
   $id: "#endpoint/endpoint"
-  endpoint: /v1/load_balancers/pools/{poolID}
+  endpoint: /load_balancers/pools/{poolID}
   method: PATCH
   input_headers: *input_headers
   output_encoding: *outputEncoding
@@ -120,7 +120,7 @@
       extra_config: *extraConfig
 - $schema: https://www.krakend.io/schema/endpoint.json
   $id: "#endpoint/endpoint"
-  endpoint: /v1/load_balancers/pools/{poolID}
+  endpoint: /load_balancers/pools/{poolID}
   method: PUT
   input_headers: *input_headers
   output_encoding: *outputEncoding
