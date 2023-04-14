@@ -1,4 +1,4 @@
-FROM ghcr.io/infratographer/porton/porton@sha256:3c292594745624ba316ca3be1cf74142b9cec7e0ab9c5a787e1098418b1d810d
+FROM ghcr.io/infratographer/porton/porton@sha256:8bf86abdc150c5bd33d1d61a4e3add236eb731b5e417ec5098bafe9c2fa239b8
 
 USER root
 
