@@ -10,6 +10,7 @@ GATEWAY_IMAGE_TAG?=latest
 DEBUG?=true
 
 KRAKEND_PORT?=8080
+SETTINGS_ENV?=dev
 
 # Override the default docker run arguments. this is useful for running the
 # commands as a non-root user.
@@ -22,15 +23,25 @@ help: Makefile ## Print help
 .PHONY: verify
 verify:	## Run lintings and verification on endpoints
 	@echo "Verifying the endpoints..."
-	@docker run \
-		--rm -t -v $(PWD)/endpoints:/endpoints $(LOCAL_RUN_ARGS) $(APIHELPER_IMAGE):$(APIHELPER_IMAGE_TAG) \
+	@docker run --rm -t \
+		-v $(PWD)/endpoints:/endpoints \
+		-v $(PWD)/krakendcfg:/etc/krakend/ \
+		-e FC_ENABLE=1 \
+		-e FC_SETTINGS=/etc/krakend/settings/${SETTINGS_ENV} \
+		-e FC_PARTIALS=/etc/krakend/partials \
+		$(LOCAL_RUN_ARGS) $(APIHELPER_IMAGE):$(APIHELPER_IMAGE_TAG) \
 		verify --debug=$(DEBUG) --endpoints /endpoints
 
 .PHONY: aggregate
 aggregate: 		## Aggregate the endpoints into a single file
 	@echo "Aggregating the endpoints..."
-	@docker run \
-		--rm -t -v $(PWD):/workdir $(LOCAL_RUN_ARGS) $(APIHELPER_IMAGE):$(APIHELPER_IMAGE_TAG) \
+	@docker run --rm -t \
+		-v $(PWD):/workdir \
+		-v $(PWD)/krakendcfg:/etc/krakend/ \
+		-e FC_ENABLE=1 \
+		-e FC_SETTINGS=/etc/krakend/settings/${SETTINGS_ENV} \
+		-e FC_PARTIALS=/etc/krakend/partials \
+		$(LOCAL_RUN_ARGS) $(APIHELPER_IMAGE):$(APIHELPER_IMAGE_TAG) \
 		aggregate --debug=$(DEBUG) \
 		--endpoints /workdir/endpoints \
 		--output "/workdir/endpoints.json"
@@ -38,7 +49,13 @@ aggregate: 		## Aggregate the endpoints into a single file
 .PHONY: generate
 generate:	## Generate the krakend configuration
 	@echo "Generating the krakend configuration..."
-	@docker run --rm -t -v $(PWD):/workdir $(LOCAL_RUN_ARGS) $(APIHELPER_IMAGE):$(APIHELPER_IMAGE_TAG) \
+	@docker run --rm -t \
+		-v $(PWD):/workdir \
+		-v $(PWD)/krakendcfg:/etc/krakend/ \
+		-e FC_ENABLE=1 \
+		-e FC_SETTINGS=/etc/krakend/settings/${SETTINGS_ENV} \
+		-e FC_PARTIALS=/etc/krakend/partials \
+		$(LOCAL_RUN_ARGS) $(APIHELPER_IMAGE):$(APIHELPER_IMAGE_TAG) \
 		generate --debug=$(DEBUG) \
 		--endpoints /workdir/endpoints \
 		--config /workdir/krakendcfg/krakend.tmpl \
@@ -62,11 +79,17 @@ run-local: gateway-image ## Build and run local api gateway
 .PHONY: dev-verify
 dev-verify:  ## Run lintings and verification on endpoints in the devcontainer
 	@echo "Verifying the endpoints..."
+	FC_ENABLE=1 \
+	FC_SETTINGS=/etc/krakend/settings/${SETTINGS_ENV} \
+	FC_PARTIALS=/etc/krakend/partials \
 	@krakend-endpoints-tool verify --debug=$(DEBUG) --endpoints /workspace/endpoints
 
 .PHONY: dev-aggregate
 dev-aggregate:  ## Aggregate the endpoints into a single file in the devcontainer
 	@echo "Aggregating the endpoints..."
+	FC_ENABLE=1 \
+	FC_SETTINGS=/etc/krakend/settings/${SETTINGS_ENV} \
+	FC_PARTIALS=/etc/krakend/partials \
 	@krakend-endpoints-tool aggregate --debug=$(DEBUG) \
 		--endpoints /workspace/endpoints \
 		--output "/workspace/endpoints.json"
@@ -74,6 +97,9 @@ dev-aggregate:  ## Aggregate the endpoints into a single file in the devcontaine
 .PHONY: dev-generate
 dev-generate:  ## Generate the krakend configuration in the devcontainer
 	@echo "Generating the krakend configuration..."
+	FC_ENABLE=1 \
+	FC_SETTINGS=/etc/krakend/settings/${SETTINGS_ENV} \
+	FC_PARTIALS=/etc/krakend/partials \
 	@krakend-endpoints-tool  generate --debug=$(DEBUG) \
 		--endpoints /workspace/endpoints \
 		--config /workspace/krakendcfg/krakend.tmpl \

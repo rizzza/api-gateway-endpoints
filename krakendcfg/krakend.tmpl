@@ -3,9 +3,9 @@
     "version": 3,
     "name": "your-api-group-name",
     "port": {{ env "KRAKEND_PORT" }},
-    "timeout": "3s",
-    "cache_ttl":  "3s",
-    "output_encoding": "json",
+    "timeout": "{{ default "3s" .service.timeout }}",
+    "cache_ttl":  "{{ default "3s" .service.cache_ttl }}",
+    "output_encoding": "{{ default "json" .service.output_encoding }},
     "plugin": {
         "pattern":".so",
         "folder": "/opt/krakend/plugins/"

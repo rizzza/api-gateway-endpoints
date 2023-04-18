@@ -12,8 +12,7 @@
   backend:
     - url_pattern: /v1/tenant/{tenantID}/loadbalancers
       method: GET
-      host: &hosts
-        - http://host.docker.internal:7608
+      host: &hosts {{ .backends.loadbalancer_api }}
       extra_config: &extraConfig {}
 - $schema: https://www.krakend.io/schema/endpoint.json
   $id: "#endpoint/endpoint"
