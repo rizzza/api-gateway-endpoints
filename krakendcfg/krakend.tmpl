@@ -5,7 +5,7 @@
     "port": {{ env "KRAKEND_PORT" }},
     "timeout": "{{ default "3s" .service.timeout }}",
     "cache_ttl":  "{{ default "3s" .service.cache_ttl }}",
-    "output_encoding": "{{ default "json" .service.output_encoding }},
+    "output_encoding": "{{ default "json" .service.output_encoding }}",
     "plugin": {
         "pattern":".so",
         "folder": "/opt/krakend/plugins/"
