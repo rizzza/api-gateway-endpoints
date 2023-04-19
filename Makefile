@@ -79,17 +79,11 @@ run-local: gateway-image ## Build and run local api gateway
 .PHONY: dev-verify
 dev-verify:  ## Run lintings and verification on endpoints in the devcontainer
 	@echo "Verifying the endpoints..."
-	FC_ENABLE=1 \
-	FC_SETTINGS=/etc/krakend/settings/${SETTINGS_ENV} \
-	FC_PARTIALS=/etc/krakend/partials \
 	@krakend-endpoints-tool verify --debug=$(DEBUG) --endpoints /workspace/endpoints
 
 .PHONY: dev-aggregate
 dev-aggregate:  ## Aggregate the endpoints into a single file in the devcontainer
 	@echo "Aggregating the endpoints..."
-	FC_ENABLE=1 \
-	FC_SETTINGS=/etc/krakend/settings/${SETTINGS_ENV} \
-	FC_PARTIALS=/etc/krakend/partials \
 	@krakend-endpoints-tool aggregate --debug=$(DEBUG) \
 		--endpoints /workspace/endpoints \
 		--output "/workspace/endpoints.json"
@@ -97,9 +91,6 @@ dev-aggregate:  ## Aggregate the endpoints into a single file in the devcontaine
 .PHONY: dev-generate
 dev-generate:  ## Generate the krakend configuration in the devcontainer
 	@echo "Generating the krakend configuration..."
-	FC_ENABLE=1 \
-	FC_SETTINGS=/etc/krakend/settings/${SETTINGS_ENV} \
-	FC_PARTIALS=/etc/krakend/partials \
 	@krakend-endpoints-tool  generate --debug=$(DEBUG) \
 		--endpoints /workspace/endpoints \
 		--config /workspace/krakendcfg/krakend.tmpl \

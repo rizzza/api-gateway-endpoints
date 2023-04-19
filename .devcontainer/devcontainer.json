@@ -6,9 +6,11 @@
     },
     "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
     "workspaceFolder": "/workspace",
-    "containerEnv":{
+    "containerEnv": {
         "KRAKEND_PORT": "8080",
-        "FC_ENABLE": "1"
+        "FC_ENABLE": "1",
+        "FC_SETTINGS": "krakendcfg/settings/dev",
+        "FC_PARTIALS": "krakendcfg/partials"
     },
     "postCreateCommand": [
         ".devcontainer/scripts/dev_cert.sh"
@@ -16,7 +18,6 @@
     "customizations": {
         "vscode": {
             "settings": {},
-
             // Add the IDs of extensions you want installed when the container is created.
             "extensions": [
                 "mutantdino.resourcemonitor",
@@ -25,11 +26,9 @@
                 "streetsidesoftware.code-spell-checker"
             ]
         },
-        
         "features": {
             "git": "latest"
         },
-
         "remoteUser": "vscode"
     }
 }
