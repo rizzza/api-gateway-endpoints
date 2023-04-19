@@ -8,7 +8,6 @@
     "workspaceFolder": "/workspace",
     "containerEnv": {
         "KRAKEND_PORT": "8080",
-        "FC_ENABLE": "1",
         "FC_SETTINGS": "krakendcfg/settings/dev",
         "FC_PARTIALS": "krakendcfg/partials"
     },

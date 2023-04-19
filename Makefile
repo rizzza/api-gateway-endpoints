@@ -26,11 +26,12 @@ verify:	## Run lintings and verification on endpoints
 	@docker run --rm -t \
 		-v $(PWD)/endpoints:/endpoints \
 		-v $(PWD)/krakendcfg:/etc/krakend/ \
-		-e FC_ENABLE=1 \
 		-e FC_SETTINGS=/etc/krakend/settings/${SETTINGS_ENV} \
 		-e FC_PARTIALS=/etc/krakend/partials \
 		$(LOCAL_RUN_ARGS) $(APIHELPER_IMAGE):$(APIHELPER_IMAGE_TAG) \
-		verify --debug=$(DEBUG) --endpoints /endpoints
+		verify --debug=$(DEBUG) \
+		--endpoints /endpoints \
+		--fcenable
 
 .PHONY: aggregate
 aggregate: 		## Aggregate the endpoints into a single file
@@ -38,13 +39,13 @@ aggregate: 		## Aggregate the endpoints into a single file
 	@docker run --rm -t \
 		-v $(PWD):/workdir \
 		-v $(PWD)/krakendcfg:/etc/krakend/ \
-		-e FC_ENABLE=1 \
 		-e FC_SETTINGS=/etc/krakend/settings/${SETTINGS_ENV} \
 		-e FC_PARTIALS=/etc/krakend/partials \
 		$(LOCAL_RUN_ARGS) $(APIHELPER_IMAGE):$(APIHELPER_IMAGE_TAG) \
 		aggregate --debug=$(DEBUG) \
 		--endpoints /workdir/endpoints \
-		--output "/workdir/endpoints.json"
+		--output "/workdir/endpoints.json" \
+		--fcenable
 
 .PHONY: generate
 generate:	## Generate the krakend configuration
@@ -52,14 +53,14 @@ generate:	## Generate the krakend configuration
 	@docker run --rm -t \
 		-v $(PWD):/workdir \
 		-v $(PWD)/krakendcfg:/etc/krakend/ \
-		-e FC_ENABLE=1 \
 		-e FC_SETTINGS=/etc/krakend/settings/${SETTINGS_ENV} \
 		-e FC_PARTIALS=/etc/krakend/partials \
 		$(LOCAL_RUN_ARGS) $(APIHELPER_IMAGE):$(APIHELPER_IMAGE_TAG) \
 		generate --debug=$(DEBUG) \
 		--endpoints /workdir/endpoints \
 		--config /workdir/krakendcfg/krakend.tmpl \
-		--output "/workdir/krakend.tmpl"
+		--output "/workdir/krakend.tmpl" \
+		--fcenable
 	@echo "\n\n* Generated krakend.tmpl"
 
 .PHONY: gateway-image
@@ -79,14 +80,17 @@ run-local: gateway-image ## Build and run local api gateway
 .PHONY: dev-verify
 dev-verify:  ## Run lintings and verification on endpoints in the devcontainer
 	@echo "Verifying the endpoints..."
-	@krakend-endpoints-tool verify --debug=$(DEBUG) --endpoints /workspace/endpoints
+	@krakend-endpoints-tool verify --debug=$(DEBUG) \
+		--endpoints /workspace/endpoints \
+		--fcenable
 
 .PHONY: dev-aggregate
 dev-aggregate:  ## Aggregate the endpoints into a single file in the devcontainer
 	@echo "Aggregating the endpoints..."
 	@krakend-endpoints-tool aggregate --debug=$(DEBUG) \
 		--endpoints /workspace/endpoints \
-		--output "/workspace/endpoints.json"
+		--output "/workspace/endpoints.json" \
+		--fcenable
 
 .PHONY: dev-generate
 dev-generate:  ## Generate the krakend configuration in the devcontainer
