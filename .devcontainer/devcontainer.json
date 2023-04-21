@@ -7,9 +7,13 @@
     "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
     "workspaceFolder": "/workspace",
     "containerEnv": {
+        "FC_ENABLE": 1,
+        "FC_SETTINGS": "krakendcfg/settings",
+        "FC_PARTIALS": "krakendcfg/partials",
+        "FC_TEMPLATES": "krakendcfg/templates",
+        "FC_OUT": "krakend.yml",
         "KRAKEND_PORT": "8080",
-        "FC_SETTINGS": "krakendcfg/settings/dev",
-        "FC_PARTIALS": "krakendcfg/partials"
+        "LOADBALANCER_API_BACKEND_HOSTS": "http://host.docker.internal:7608"
     },
     "postCreateCommand": [
         ".devcontainer/scripts/dev_cert.sh"

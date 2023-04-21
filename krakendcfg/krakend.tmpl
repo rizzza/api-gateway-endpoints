@@ -1,50 +1,18 @@
-{
-    "$schema": "https://www.krakend.io/schema/v3.json",
-    "version": 3,
-    "name": "your-api-group-name",
-    "port": {{ env "KRAKEND_PORT" }},
-    "timeout": "{{ default "3s" .service.timeout }}",
-    "cache_ttl":  "{{ default "3s" .service.cache_ttl }}",
-    "output_encoding": "{{ default "json" .service.output_encoding }}",
-    "plugin": {
-        "pattern":".so",
-        "folder": "/opt/krakend/plugins/"
-    },
-    "extra_config": {
-      "router": {
-        "@comment": "The health endpoint checks do not show in the logs",
-        "logger_skip_paths": [
-           "/__health"
-        ]
-      },
-      "plugin/http-server": {
-        "name": ["virtualhost"],
-        "virtualhost": {
-          "hosts": ["api.test.v1"]
-        }
-      },
-      "telemetry/opencensus": {
-          "sample_rate": 100,
-          "reporting_period": 1,
-          "enabled_layers": {
-            "backend": true,
-            "pipe": true,
-            "router": true
-          },
-        "exporters": {
-          "prometheus": {
-            "port": 9091,
-            "tag_host": true,
-            "tag_path": true,
-            "tag_method": true,
-            "tag_statuscode": true
-          }
-        }
-      }
-    },
-    "tls": {
-      "public_key": "/cert/tls.crt",
-      "private_key": "/cert/tls.key"
-    },
-    "endpoints": $ENDPOINTS$
-}
+---
+"$schema": https://www.krakend.io/schema/v3.json
+version: 3
+name: your-api-group-name
+port: {{ env "KRAKEND_PORT" }}
+timeout: {{ default "3s" .service.timeout }}
+cache_ttl: {{ default "3s" .service.cache_ttl }}
+output_encoding: {{ default "no-op" .service.output_encoding }}
+plugin:
+  pattern: ".so"
+  folder: "/opt/krakend/plugins/"
+extra_config:
+{{ include "no_healthcheck_logs.tmpl" | indent 2 }}
+{{ include "telemetry.tmpl" | indent 2 }}
+{{ include "cors.tmpl" | indent 2 }}
+endpoints:
+{{ template "_endpoints.tmpl" . }}
+

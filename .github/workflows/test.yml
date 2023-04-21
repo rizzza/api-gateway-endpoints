@@ -17,24 +17,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Run verify
-        run: make verify
+      - name: Run check
+        run: FC_OUT=/tmp/krakend.yml make check
 
   build-image:
     name: build-image
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Generate krakend configuration
-        run: make generate
-      
+      - name: Verify krakend configuration
+        run: FC_OUT=/tmp/krakend.yml make check
+
       - name: docker-metadata
         id: docker-metadata
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/${{ github.repository_owner }}/api-gateway-image
+          images: ghcr.io/${{ github.repository_owner }}/api-gateway
           tags: |
             type=sha
 

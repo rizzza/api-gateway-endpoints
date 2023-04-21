@@ -1,26 +1,20 @@
-# API Gateway Endpoint Definitions Template
+# Infratographer API-GATEWAY
 
-This repository contains the API Gateway endpoint definitions as well as the
-configurations to run in the all-in-one image.
+This repo contains the api-gateway for infratographer. This is the API that all infratographer eco systems tools are being built against.
 
-These definitions are used to generate the API Gateway configuration for the services. The
-[`Dockerfile`](Dockerfile) in this repository is used to build a container image that contains
-the krakend configuration and the krakend binary and plugins.
+The goal is to provide an easy way for end users to add additional endpoints for custom components as well as replace infratographer provided components with components that provide the same API interfaces.
 
 ## Usage
 
 ### Adding endpoints
 
-All the definitions are in the `endpoints` directory. The format of the files follows the
+All the definitions are in the `krakendcfg/templates` directory. Once you create your endpoint file, add it's reference to the `krakendcfg/templates/_endpoints.tmpl` file. The format of the files follows the
 [Lura](https://luraproject.org/) [endpoint configuration format](https://www.krakend.io/docs/endpoints/).
 Specifically, each file may be a single endpoint definition or an array of endpoint definitions.
 
-Each file should be placed in a directory named after the service it is for. The name of the file should be
-the name of the endpoint.
+The name of the file should be the name of the endpoint.
 
-The files in `endpoints/api.test.v1/` serve as examples.
-
-The top level directory should be the FQDN of your API group. e.g. `iam.metalctrl.io`.
+The file in `krakendcfg/templates/loadbalancer_api_v1.tmpl` serves as an example.
 
 ## Distribution
 
@@ -30,36 +24,18 @@ of the krakend configuration is available in the
 embedded and distributed as a container image that also contains the API
 Gateway binary and plugins.
 
-The resulting image is `ghcr.io/infratographer/api-gateway-image`.
+The resulting image is `ghcr.io/infratographer/api-gateway`.
 
 ## Testing
 
 Note that `docker` is required to run verifications and the tests.
 
-In order to locally verify that the endpoint definitions are valid, you can run the following
+In order to locally verify that the endpoint definitions and config are valid, you can run the following
 command:
 
 ```bash
-make verify
+make check
 ```
-
-This will ensure that any endpoints you create within the `endpoints` directory are valid.
-
-If you want to see how the endpoint definitions are transformed into the API Gateway configuration,
-you can run the following command:
-
-```bash
-make aggregate
-```
-
-If you want to generate the API Gateway configuration and print it to the console, you can run:
-
-```bash
-make generate
-```
-
-This will print the API Gateway configuration to the console. It will also create a file named
-`krakend.tmpl` in the root of the repository. This file is ignored by git.
 
 Finally, if you want to create a container image like the one we ship with the API Gateway, you
 can run the following command:
@@ -70,22 +46,12 @@ make gateway-image
 
 ## Running locally
 
-Some features are only supported by the enterprise version.  You can run locally with a license.  If you
-don't have access to a license, you can run without virtual hosting by removing the`--vhost` in the
-Makefile `generate` target temporarily. Also, you will need local certificates:
-
 ```bash
-mkdir cert
-openssl req -newkey rsa:2048 -new -nodes -x509 -days 365 -out cert/tls.crt -keyout cert/tls.key \
-    -subj "/C=US/ST=California/L=Mountain View/O=Your Organization/OU=Your Unit/CN=localhost"
+make run-local
 ```
 
-and then you can run with docker:
+### Dev container
 
 ```bash
-docker run \
-  -e "KRAKEND_PORT=8080" \
-  -v "`pwd`/cert:/cert" \
-  -p 8080:8080 -p 8090:8090 -p 9091:9091 \
-  ghcr.io/infratographer/api-gateway-image:latest
+make dev-run
 ```
