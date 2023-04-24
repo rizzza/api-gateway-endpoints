@@ -1,6 +1,10 @@
-# Infratographer API-GATEWAY
+# Infratographer API Gateway Endpoint Definitions Template
 
-This repo contains the api-gateway for infratographer. This is the API that all infratographer eco systems tools are being built against.
+This repo contains the api-gateway and endpoint tempalte definitions for infratographer. This is the API that all infratographer eco systems tools are being built against.
+
+These definitions are used to generate the API Gateway configuration for the services. The
+[`Dockerfile`](Dockerfile) in this repository is used to build a container image that contains
+the krakend configuration and the krakend binary and plugins.
 
 The goal is to provide an easy way for end users to add additional endpoints for custom components as well as replace infratographer provided components with components that provide the same API interfaces.
 
@@ -24,7 +28,7 @@ of the krakend configuration is available in the
 embedded and distributed as a container image that also contains the API
 Gateway binary and plugins.
 
-The resulting image is `ghcr.io/infratographer/api-gateway`.
+The resulting image is `ghcr.io/infratographer/api-gateway-image`.
 
 ## Testing
 
